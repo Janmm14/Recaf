@@ -7,6 +7,7 @@ import net.fabricmc.mappingio.MappingVisitor;
 import net.fabricmc.mappingio.tree.MappingTree;
 import net.fabricmc.mappingio.tree.MemoryMappingTree;
 import net.fabricmc.mappingio.tree.VisitOrder;
+import software.coley.recaf.services.mapping.ExportableMappings;
 import software.coley.recaf.services.mapping.IntermediateMappings;
 import software.coley.recaf.services.mapping.Mappings;
 import software.coley.recaf.services.mapping.data.ClassMapping;
@@ -74,7 +75,7 @@ public interface MappingFileFormat {
 	/**
 	 * @return {@code true} when exporting the current mappings to text is supported.
 	 *
-	 * @see #exportText(Mappings)
+	 * @see #exportText(ExportableMappings)
 	 */
 	default boolean supportsExportText() {
 		return true;
@@ -90,7 +91,7 @@ public interface MappingFileFormat {
 	 * 		When writing the mappings encounters any failure.
 	 */
 	@Nullable
-	default String exportText(@Nonnull Mappings mappings) throws InvalidMappingException {
+	default String exportText(@Nonnull ExportableMappings mappings) throws InvalidMappingException {
 		return null;
 	}
 
@@ -157,7 +158,7 @@ public interface MappingFileFormat {
 	 * 		When writing the mappings encounters any failure.
 	 */
 	@Nonnull
-	static String export(@Nonnull Mappings mappings, @Nonnull Function<StringWriter, MappingVisitor> writerFactory) throws InvalidMappingException {
+	static String export(@Nonnull ExportableMappings mappings, @Nonnull Function<StringWriter, MappingVisitor> writerFactory) throws InvalidMappingException {
 		return export(mappings, "in", List.of("out"), writerFactory);
 	}
 
@@ -179,7 +180,7 @@ public interface MappingFileFormat {
 	 * 		When writing the mappings encounters any failure.
 	 */
 	@Nonnull
-	static String export(@Nonnull Mappings mappings, @Nonnull String inputNamespace,
+	static String export(@Nonnull ExportableMappings mappings, @Nonnull String inputNamespace,
 						 @Nonnull List<String> outputNamespaces, @Nonnull Function<StringWriter, MappingVisitor> writerFactory) throws InvalidMappingException {
 		MemoryMappingTree tree = new MemoryMappingTree();
 		IntermediateMappings intermediate = mappings.exportIntermediate();

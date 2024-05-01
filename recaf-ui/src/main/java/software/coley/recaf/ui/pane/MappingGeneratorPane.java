@@ -30,10 +30,10 @@ import software.coley.recaf.config.ConfigGroups;
 import software.coley.recaf.services.config.ConfigComponentFactory;
 import software.coley.recaf.services.config.ConfigComponentManager;
 import software.coley.recaf.services.inheritance.InheritanceGraph;
+import software.coley.recaf.services.mapping.ExportableMappings;
 import software.coley.recaf.services.mapping.IntermediateMappings;
 import software.coley.recaf.services.mapping.MappingApplier;
 import software.coley.recaf.services.mapping.MappingResults;
-import software.coley.recaf.services.mapping.Mappings;
 import software.coley.recaf.services.mapping.aggregate.AggregateMappingManager;
 import software.coley.recaf.services.mapping.aggregate.AggregatedMappings;
 import software.coley.recaf.services.mapping.format.EnigmaMappings;
@@ -73,7 +73,7 @@ public class MappingGeneratorPane extends StackPane {
 	private static final ToStringConverter<String> textPredicateConverter = ToStringConverter.from(MappingGeneratorPane::predicateIdToTranslation);
 	private static final NameGeneratorProvider<?> fallbackProvider = new IncrementingNameGeneratorProvider();
 	private final StringProperty currentProvider = new SimpleStringProperty(IncrementingNameGeneratorProvider.ID);
-	private final ObjectProperty<Mappings> mappingsToApply = new SimpleObjectProperty<>();
+	private final ObjectProperty<ExportableMappings> mappingsToApply = new SimpleObjectProperty<>();
 	private final ListView<FilterWithConfigNode<?>> filters = new ListView<>();
 	private final List<String> stringPredicates;
 	private final List<String> stringPredicatesWithNull;
@@ -206,7 +206,7 @@ public class MappingGeneratorPane extends StackPane {
 	}
 
 	private void apply() {
-		Mappings mappings = mappingsToApply.get();
+		ExportableMappings mappings = mappingsToApply.get();
 
 		// Apply the mappings
 		if (mappings != null) {

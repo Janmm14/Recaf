@@ -9,6 +9,7 @@ import software.coley.recaf.info.ClassInfo;
 import software.coley.recaf.info.member.FieldMember;
 import software.coley.recaf.info.member.MethodMember;
 import software.coley.recaf.services.inheritance.InheritanceGraph;
+import software.coley.recaf.services.mapping.ExportableMappings;
 import software.coley.recaf.services.mapping.IntermediateMappings;
 import software.coley.recaf.services.mapping.Mappings;
 import software.coley.recaf.services.mapping.data.MethodMapping;
@@ -135,7 +136,7 @@ public class MappingGeneratorTest extends TestBase {
 			};
 
 			// Apply and assert nothing was generated
-			Mappings mappings = mappingGenerator.generate(workspace, resource, inheritanceGraph, nameGenerator, filter);
+			ExportableMappings mappings = mappingGenerator.generate(workspace, resource, inheritanceGraph, nameGenerator, filter);
 			IntermediateMappings intermediate = mappings.exportIntermediate();
 			assertEquals(0, intermediate.getClasses().size());
 			assertEquals(0, intermediate.getFields().size());
@@ -209,7 +210,7 @@ public class MappingGeneratorTest extends TestBase {
 					new ExcludeModifiersNameFilter(null, List.of(Opcodes.ACC_PRIVATE, Opcodes.ACC_PROTECTED, Opcodes.ACC_PUBLIC), true, true, true);
 
 			// Generate mappings
-			Mappings mappings = mappingGenerator.generate(workspace, resource, inheritanceGraph, nameGenerator, filter);
+			ExportableMappings mappings = mappingGenerator.generate(workspace, resource, inheritanceGraph, nameGenerator, filter);
 
 			// There is 1 package-private field in our workspace
 			//  - 'packageField' in 'AccessibleFields'
@@ -231,7 +232,7 @@ public class MappingGeneratorTest extends TestBase {
 					new ExcludeModifiersNameFilter(null, List.of(Opcodes.ACC_PRIVATE), false, true, true);
 
 			// Generate mappings and assert all classes were mapped.
-			Mappings mappings = mappingGenerator.generate(workspace, resource, inheritanceGraph, nameGenerator, filter);
+			ExportableMappings mappings = mappingGenerator.generate(workspace, resource, inheritanceGraph, nameGenerator, filter);
 			IntermediateMappings intermediate = mappings.exportIntermediate();
 			assertEquals(5, intermediate.getClasses().size());
 		}
@@ -243,7 +244,7 @@ public class MappingGeneratorTest extends TestBase {
 					new IncludeModifiersNameFilter(null, List.of(Opcodes.ACC_PRIVATE), false, false, true);
 
 			// Generate mappings
-			Mappings mappings = mappingGenerator.generate(workspace, resource, inheritanceGraph, nameGenerator, filter);
+			ExportableMappings mappings = mappingGenerator.generate(workspace, resource, inheritanceGraph, nameGenerator, filter);
 
 			// There is only 1 private method in our workspace:
 			//  - 'privateMethod' in 'AccessibleMethods'
@@ -263,7 +264,7 @@ public class MappingGeneratorTest extends TestBase {
 					new IncludeNameFilter(null, predicate, predicate, predicate);
 
 			// Generate mappings
-			Mappings mappings = mappingGenerator.generate(workspace, resource, inheritanceGraph, nameGenerator, filter);
+			ExportableMappings mappings = mappingGenerator.generate(workspace, resource, inheritanceGraph, nameGenerator, filter);
 
 			// There are only two classes that contain the given text, AccessibleMethods and AccessibleMethodsChild
 			IntermediateMappings intermediate = mappings.exportIntermediate();
@@ -279,7 +280,7 @@ public class MappingGeneratorTest extends TestBase {
 					new IncludeClassesFilter(null, strMatchProvider.newContainsPredicate("AccessibleMethods"));
 
 			// Generate mappings
-			Mappings mappings = mappingGenerator.generate(workspace, resource, inheritanceGraph, nameGenerator, filter);
+			ExportableMappings mappings = mappingGenerator.generate(workspace, resource, inheritanceGraph, nameGenerator, filter);
 
 			// There are only two classes that contain the given text, AccessibleMethods and AccessibleMethodsChild
 			// All of their methods should be remapped. They contain no fields.

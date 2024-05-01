@@ -10,7 +10,7 @@ import software.coley.recaf.info.member.MethodMember;
 import software.coley.recaf.services.Service;
 import software.coley.recaf.services.inheritance.InheritanceGraph;
 import software.coley.recaf.services.inheritance.InheritanceVertex;
-import software.coley.recaf.services.mapping.Mappings;
+import software.coley.recaf.services.mapping.ExportableMappings;
 import software.coley.recaf.services.mapping.MappingsAdapter;
 import software.coley.recaf.services.mapping.gen.filter.ExcludeEnumMethodsFilter;
 import software.coley.recaf.services.mapping.gen.filter.NameGeneratorFilter;
@@ -52,11 +52,11 @@ public class MappingGenerator implements Service {
 	 * @return Newly generated mappings.
 	 */
 	@Nonnull
-	public Mappings generate(@Nullable Workspace workspace,
-							 @Nonnull WorkspaceResource resource,
-							 @Nonnull InheritanceGraph inheritanceGraph,
-							 @Nonnull NameGenerator generator,
-							 @Nullable NameGeneratorFilter filter) {
+	public ExportableMappings generate(@Nullable Workspace workspace,
+									   @Nonnull WorkspaceResource resource,
+									   @Nonnull InheritanceGraph inheritanceGraph,
+									   @Nonnull NameGenerator generator,
+									   @Nullable NameGeneratorFilter filter) {
 		// Adapt filter to handle baseline cases.
 		filter = new ExcludeEnumMethodsFilter(filter);
 

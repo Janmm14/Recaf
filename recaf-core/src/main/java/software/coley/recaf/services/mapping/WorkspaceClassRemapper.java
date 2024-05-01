@@ -20,7 +20,7 @@ import software.coley.recaf.workspace.model.Workspace;
  * @author Matt Coley
  */
 public class WorkspaceClassRemapper extends ClassRemapper {
-	private final WorkspaceBackedRemapper workspaceRemapper;
+	private final EnhancedRemapper workspaceRemapper;
 
 	/**
 	 * @param cv
@@ -31,10 +31,25 @@ public class WorkspaceClassRemapper extends ClassRemapper {
 	 * 		Mappings to apply.
 	 */
 	public WorkspaceClassRemapper(@Nullable ClassVisitor cv, @Nonnull Workspace workspace, @Nonnull Mappings mappings) {
-		super(RecafConstants.getAsmVersion(), cv, new WorkspaceBackedRemapper(workspace, mappings));
+		this(cv, workspace, mappings, null);
+	}
+
+	/**
+	 * @param cv
+	 * 		Class to visit and rename mapped items of.
+	 * @param workspace
+	 * 		Workspace to pull class info from when additional context is needed.
+	 * @param mappings
+	 * 		Mappings to apply.
+	 * @param remapper
+	 * 		Optional nonstandard remapper to use.
+	 */
+	public WorkspaceClassRemapper(@Nullable ClassVisitor cv, @Nonnull Workspace workspace, @Nonnull Mappings mappings,
+								  @Nullable EnhancedRemapper remapper) {
+		super(RecafConstants.getAsmVersion(), cv, remapper != null ? remapper : new WorkspaceBackedRemapper(workspace, mappings));
 		// Shadow the parent type's remapper locally,
 		// allowing us to use our more specific methods with additional context.
-		this.workspaceRemapper = ((WorkspaceBackedRemapper) super.remapper);
+		this.workspaceRemapper = (EnhancedRemapper) super.remapper;
 	}
 
 	@Override
@@ -46,7 +61,7 @@ public class WorkspaceClassRemapper extends ClassRemapper {
 	 * @return {@code true} when any mapping has been found and used.
 	 */
 	public boolean hasMappingBeenApplied() {
-		return workspaceRemapper.hasMappingBeenApplied();
+		return workspaceRemapper instanceof BasicMappingsRemapper bmr && bmr.hasMappingBeenApplied();
 	}
 
 	/**

@@ -2,15 +2,13 @@ package software.coley.recaf.services.decompile;
 
 import jakarta.annotation.Nonnull;
 import software.coley.recaf.info.JvmClassInfo;
-import software.coley.recaf.info.properties.builtin.CachedDecompileProperty;
 import software.coley.recaf.services.decompile.filter.JvmBytecodeFilter;
 import software.coley.recaf.services.decompile.filter.OutputTextFilter;
+import software.coley.recaf.services.decompile.filter.WorkspaceJvmBytecodeFilter;
 import software.coley.recaf.workspace.model.Workspace;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Basic setup for {@link JvmDecompiler}.
@@ -19,6 +17,7 @@ import java.util.Set;
  */
 public abstract class AbstractJvmDecompiler extends AbstractDecompiler implements JvmDecompiler {
 	private final List<JvmBytecodeFilter> bytecodeFilters = new ArrayList<>();
+	protected final List<WorkspaceJvmBytecodeFilter> workspaceFilters = new ArrayList<>();
 
 	/**
 	 * @param name
@@ -42,11 +41,24 @@ public abstract class AbstractJvmDecompiler extends AbstractDecompiler implement
 		return bytecodeFilters.remove(filter);
 	}
 
+	@Override
+	public boolean addWorkspaceBytecodeFilter(@Nonnull WorkspaceJvmBytecodeFilter filter) {
+		return workspaceFilters.add(filter);
+	}
+
+	@Override
+	public boolean removeWorkspaceBytecodeFilter(@Nonnull WorkspaceJvmBytecodeFilter filter) {
+		return workspaceFilters.remove(filter);
+	}
+
 	@Nonnull
 	@Override
 	public final DecompileResult decompile(@Nonnull Workspace workspace, @Nonnull JvmClassInfo classInfo) {
 		// Get bytecode and run through filters.
 		JvmClassInfo filteredBytecode = JvmBytecodeFilter.applyFilters(workspace, classInfo, bytecodeFilters);
+
+		byte[] bytes = WorkspaceJvmBytecodeFilter.applyFilters(workspace, workspaceFilters, filteredBytecode, filteredBytecode.getBytecode());
+		filteredBytecode = filteredBytecode.toJvmClassBuilder().adaptFrom(bytes).build();
 
 		// Pass to implementation.
 		DecompileResult result = decompileInternal(workspace, filteredBytecode);

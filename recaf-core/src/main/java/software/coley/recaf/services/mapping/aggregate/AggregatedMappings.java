@@ -1,8 +1,8 @@
 package software.coley.recaf.services.mapping.aggregate;
 
 import jakarta.annotation.Nonnull;
+import software.coley.recaf.services.mapping.ExportableMappings;
 import software.coley.recaf.services.mapping.IntermediateMappings;
-import software.coley.recaf.services.mapping.Mappings;
 import software.coley.recaf.services.mapping.WorkspaceBackedRemapper;
 import software.coley.recaf.services.mapping.data.ClassMapping;
 import software.coley.recaf.services.mapping.data.FieldMapping;
@@ -142,7 +142,7 @@ public class AggregatedMappings extends IntermediateMappings {
 	 *
 	 * @return {@code true} when the mapping operation required bridging a current class name to its original name.
 	 */
-	public boolean update(Mappings newMappings) {
+	public boolean update(ExportableMappings newMappings) {
 		// ORIGINAL:
 		//  a -> b
 		//  a.f1 -> b.f2

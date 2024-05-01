@@ -35,8 +35,8 @@ import software.coley.recaf.info.properties.builtin.OriginalClassNameProperty;
 import software.coley.recaf.path.ClassPathNode;
 import software.coley.recaf.services.cell.CellConfigurationService;
 import software.coley.recaf.services.cell.context.ContextSource;
+import software.coley.recaf.services.mapping.ExportableMappings;
 import software.coley.recaf.services.mapping.IntermediateMappings;
-import software.coley.recaf.services.mapping.Mappings;
 import software.coley.recaf.services.mapping.aggregate.AggregateMappingManager;
 import software.coley.recaf.ui.config.WorkspaceExplorerConfig;
 import software.coley.recaf.ui.control.PannableView;
@@ -240,7 +240,7 @@ public class MappingProgressPane extends BorderPane implements ResourceJvmClassL
 		updateTree();
 	}
 
-	private void updateTreeAndMappings(@Nullable Mappings mappings) {
+	private void updateTreeAndMappings(@Nullable ExportableMappings mappings) {
 		this.mappings = mappings == null ? null : mappings.exportIntermediate();
 		updateTree();
 	}

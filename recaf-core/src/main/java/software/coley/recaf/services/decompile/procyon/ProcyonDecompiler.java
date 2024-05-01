@@ -44,7 +44,7 @@ public class ProcyonDecompiler extends AbstractJvmDecompiler {
 		byte[] bytecode = classInfo.getBytecode();
 		ITypeLoader loader = new CompositeTypeLoader(
 				new TargetedTypeLoader(name, bytecode),
-				new WorkspaceTypeLoader(workspace)
+				new WorkspaceTypeLoader(workspace, workspaceFilters)
 		);
 		DecompilerSettings settings = config.toSettings();
 		settings.setTypeLoader(loader);

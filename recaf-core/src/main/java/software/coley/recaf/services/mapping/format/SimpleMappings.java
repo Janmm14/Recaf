@@ -2,8 +2,8 @@ package software.coley.recaf.services.mapping.format;
 
 import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.Dependent;
+import software.coley.recaf.services.mapping.ExportableMappings;
 import software.coley.recaf.services.mapping.IntermediateMappings;
-import software.coley.recaf.services.mapping.Mappings;
 import software.coley.recaf.services.mapping.data.ClassMapping;
 import software.coley.recaf.services.mapping.data.FieldMapping;
 import software.coley.recaf.services.mapping.data.MethodMapping;
@@ -90,7 +90,7 @@ public class SimpleMappings extends AbstractMappingFileFormat {
 	}
 
 	@Override
-	public String exportText(@Nonnull Mappings mappings) {
+	public String exportText(@Nonnull ExportableMappings mappings) {
 		StringBuilder sb = new StringBuilder();
 		IntermediateMappings intermediate = mappings.exportIntermediate();
 		for (String oldClassName : intermediate.getClassesWithMappings()) {

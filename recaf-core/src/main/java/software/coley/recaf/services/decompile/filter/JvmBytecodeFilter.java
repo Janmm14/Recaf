@@ -22,7 +22,7 @@ public interface JvmBytecodeFilter {
 	 * @param bytecode
 	 * 		Input JVM class bytecode. May already be modified from the original bytecode by another filter.
 	 *
-	 * @return Output JVM class bytecode.
+	 * @return Output JVM class bytecode. Needs to be a new array if modified.
 	 */
 	@Nonnull
 	byte[] filter(@Nonnull Workspace workspace, @Nonnull JvmClassInfo initialClassInfo, @Nonnull byte[] bytecode);

@@ -28,7 +28,7 @@ import java.util.function.Function;
  *
  * @author Matt Coley
  */
-public class MappingsAdapter implements Mappings {
+public class MappingsAdapter implements ExportableMappings {
 	private final Map<MappingKey, String> mappings = new HashMap<>();
 	private final boolean supportFieldTypeDifferentiation;
 	private final boolean supportVariableTypeDifferentiation;

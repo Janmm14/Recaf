@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import software.coley.recaf.cdi.AutoRegisterWorkspaceListeners;
 import software.coley.recaf.cdi.WorkspaceScoped;
 import software.coley.recaf.services.Service;
+import software.coley.recaf.services.mapping.ExportableMappings;
 import software.coley.recaf.services.mapping.Mappings;
 import software.coley.recaf.services.workspace.WorkspaceCloseListener;
 import software.coley.recaf.workspace.model.Workspace;
@@ -45,7 +46,7 @@ public class AggregateMappingManager implements Service, WorkspaceCloseListener 
 	 * @param newMappings
 	 * 		The additional mappings that were added.
 	 */
-	public void updateAggregateMappings(Mappings newMappings) {
+	public void updateAggregateMappings(ExportableMappings newMappings) {
 		aggregatedMappings.update(newMappings);
 		aggregateListeners.forEach(listener -> listener.onAggregatedMappingsUpdated(getAggregatedMappings()));
 	}

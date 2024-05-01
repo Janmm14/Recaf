@@ -4,9 +4,8 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.Dependent;
 import net.fabricmc.mappingio.format.proguard.ProGuardFileWriter;
-import net.fabricmc.mappingio.format.tiny.Tiny2FileWriter;
+import software.coley.recaf.services.mapping.ExportableMappings;
 import software.coley.recaf.services.mapping.IntermediateMappings;
-import software.coley.recaf.services.mapping.Mappings;
 import software.coley.recaf.util.StringUtil;
 
 import java.util.Arrays;
@@ -176,7 +175,7 @@ public class ProguardMappings extends AbstractMappingFileFormat {
 
 	@Nullable
 	@Override
-	public String exportText(@Nonnull Mappings mappings) throws InvalidMappingException {
+	public String exportText(@Nonnull ExportableMappings mappings) throws InvalidMappingException {
 		return MappingFileFormat.export(mappings, ProGuardFileWriter::new);
 	}
 

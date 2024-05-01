@@ -5,8 +5,8 @@ import jakarta.annotation.Nullable;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import software.coley.recaf.RecafConstants;
+import software.coley.recaf.services.mapping.ExportableMappings;
 import software.coley.recaf.services.mapping.IntermediateMappings;
-import software.coley.recaf.services.mapping.Mappings;
 import software.coley.recaf.services.mapping.WorkspaceClassRemapper;
 import software.coley.recaf.util.StringUtil;
 import software.coley.recaf.workspace.model.Workspace;
@@ -75,7 +75,7 @@ public class BogusNameRemovingVisitor extends ClassVisitor {
 		super.visitEnd();
 	}
 
-	private static class LiveMapper implements Mappings {
+	private static class LiveMapper implements ExportableMappings {
 		private final Map<String, String> lookup = new HashMap<>();
 		private int mappedTypes;
 		private int mappedNames;

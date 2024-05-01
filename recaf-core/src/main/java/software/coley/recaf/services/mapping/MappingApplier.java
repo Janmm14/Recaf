@@ -67,7 +67,7 @@ public class MappingApplier implements Service {
 	 * @return Result wrapper detailing affected classes from the mapping operation.
 	 */
 	@Nonnull
-	public MappingResults applyToClasses(@Nonnull Mappings mappings,
+	public MappingResults applyToClasses(@Nonnull ExportableMappings mappings,
 										 @Nonnull WorkspaceResource resource,
 										 @Nonnull JvmClassBundle bundle,
 										 @Nonnull List<JvmClassInfo> classes) {
@@ -96,7 +96,7 @@ public class MappingApplier implements Service {
 	 * @return Result wrapper detailing affected classes from the mapping operation.
 	 */
 	@Nonnull
-	public MappingResults applyToPrimaryResource(@Nonnull Mappings mappings) {
+	public MappingResults applyToPrimaryResource(@Nonnull ExportableMappings mappings) {
 		mappings = enrich(mappings);
 		WorkspaceResource resource = workspace.getPrimaryResource();
 
@@ -118,7 +118,7 @@ public class MappingApplier implements Service {
 	}
 
 	@Nonnull
-	private Mappings enrich(@Nonnull Mappings mappings) {
+	private ExportableMappings enrich(@Nonnull ExportableMappings mappings) {
 		// Map intermediate mappings to the adapter so that we can pass in the inheritance graph for better coverage
 		// of cases inherited field/method references.
 		if (mappings instanceof IntermediateMappings intermediateMappings) {

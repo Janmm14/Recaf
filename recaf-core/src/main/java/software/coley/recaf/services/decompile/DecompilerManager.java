@@ -19,6 +19,7 @@ import software.coley.recaf.info.properties.builtin.CachedDecompileProperty;
 import software.coley.recaf.services.Service;
 import software.coley.recaf.services.decompile.filter.JvmBytecodeFilter;
 import software.coley.recaf.services.decompile.filter.OutputTextFilter;
+import software.coley.recaf.services.decompile.filter.WorkspaceJvmBytecodeFilter;
 import software.coley.recaf.util.threading.ThreadPoolFactory;
 import software.coley.recaf.util.visitors.*;
 import software.coley.recaf.workspace.model.Workspace;
@@ -197,6 +198,30 @@ public class DecompilerManager implements Service {
 	public void removeJvmBytecodeFilter(@Nonnull JvmBytecodeFilter filter) {
 		for (JvmDecompiler decompiler : jvmDecompilers.values()) {
 			decompiler.removeJvmBytecodeFilter(filter);
+		}
+	}
+
+	/**
+	 * Adds an input workspace-wide bytecode filter to all {@link JvmDecompiler} instances.
+	 *
+	 * @param filter
+	 * 		Filter to add.
+	 */
+	public void addWorkspaceBytecodeFilter(@Nonnull WorkspaceJvmBytecodeFilter filter) {
+		for (JvmDecompiler decompiler : jvmDecompilers.values()) {
+			decompiler.addWorkspaceBytecodeFilter(filter);
+		}
+	}
+
+	/**
+	 * Removes an input workspace-wide bytecode filter from all {@link JvmDecompiler} instances.
+	 *
+	 * @param filter
+	 * 		Filter to remove
+	 */
+	public void removeWorkspaceBytecodeFilter(@Nonnull WorkspaceJvmBytecodeFilter filter) {
+		for (JvmDecompiler decompiler : jvmDecompilers.values()) {
+			decompiler.removeWorkspaceBytecodeFilter(filter);
 		}
 	}
 

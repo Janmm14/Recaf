@@ -38,7 +38,7 @@ public class MappingResults {
 	private final Map<String, ClassPathNode> preMappingPaths = new HashMap<>();
 	private final Map<String, ClassPathNode> postMappingPaths = new HashMap<>();
 	private final MappingApplicationListener applicationHandler;
-	private final Mappings mappings;
+	private final ExportableMappings mappings;
 	private AggregateMappingManager aggregateMappingManager;
 
 	/**
@@ -47,7 +47,7 @@ public class MappingResults {
 	 * @param applicationHandler
 	 * 		Optional handler for intercepting post/pre mapping states.
 	 */
-	public MappingResults(@Nonnull Mappings mappings, @Nullable MappingApplicationListener applicationHandler) {
+	public MappingResults(@Nonnull ExportableMappings mappings, @Nullable MappingApplicationListener applicationHandler) {
 		this.mappings = mappings;
 		this.applicationHandler = applicationHandler;
 	}

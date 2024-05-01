@@ -4,6 +4,7 @@ import jakarta.annotation.Nonnull;
 import org.jetbrains.java.decompiler.main.extern.IResultSaver;
 import software.coley.recaf.info.InnerClassInfo;
 import software.coley.recaf.info.JvmClassInfo;
+import software.coley.recaf.services.decompile.filter.WorkspaceJvmBytecodeFilter;
 import software.coley.recaf.workspace.model.Workspace;
 
 import java.util.ArrayList;
@@ -23,13 +24,15 @@ public class ClassSource extends BaseSource {
 	/**
 	 * @param workspace
 	 * 		Workspace to pull class files from.
+	 * @param workspaceFilters
+	 * 		Filters to apply to the whole workspace.
 	 * @param info
 	 * 		Target class to decompile.
 	 */
-	protected ClassSource(@Nonnull Workspace workspace, @Nonnull JvmClassInfo info) {
-		super(workspace);
+	protected ClassSource(@Nonnull Workspace workspace, List<WorkspaceJvmBytecodeFilter> workspaceFilters, @Nonnull JvmClassInfo info) {
+		super(workspace, workspaceFilters);
 		this.info = info;
-		sink = new DecompiledOutputSink(info);
+		sink = new DecompiledOutputSink(workspace, info, workspaceFilters);
 	}
 
 	/**
@@ -47,9 +50,18 @@ public class ClassSource extends BaseSource {
 		//  This will make QF/VF decompile each inner class separately as well, but its the best fix for now without
 		//  too much of a perf hit.
 		List<Entry> entries = new ArrayList<>();
-		entries.add(new Entry(info.getName(), Entry.BASE_VERSION));
-		for (InnerClassInfo innerClass : info.getInnerClasses())
-			entries.add(new Entry(innerClass.getName(), Entry.BASE_VERSION));
+		String name = info.getName();
+		for (WorkspaceJvmBytecodeFilter filter : workspaceFilters) {
+			name = filter.filterClassName(workspace, name);
+		}
+		entries.add(new Entry(name, Entry.BASE_VERSION));
+		for (InnerClassInfo innerClass : info.getInnerClasses()) {
+			String innerName = innerClass.getName();
+			for (WorkspaceJvmBytecodeFilter filter : workspaceFilters) {
+				innerName = filter.filterClassName(workspace, innerName);
+			}
+			entries.add(new Entry(innerName, Entry.BASE_VERSION));
+		}
 		return new Entries(entries, Collections.emptyList(), Collections.emptyList());
 	}
 

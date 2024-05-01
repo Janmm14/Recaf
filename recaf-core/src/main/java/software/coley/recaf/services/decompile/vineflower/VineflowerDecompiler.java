@@ -43,9 +43,9 @@ public class VineflowerDecompiler extends AbstractJvmDecompiler {
 		Fernflower fernflower = new Fernflower(dummySaver, config.getFernflowerProperties(), logger);
 
 		try {
-			ClassSource source = new ClassSource(workspace, info);
+			ClassSource source = new ClassSource(workspace, workspaceFilters, info);
 			fernflower.addSource(source);
-			fernflower.addLibrary(new LibrarySource(workspace));
+			fernflower.addLibrary(new LibrarySource(workspace, workspaceFilters));
 			fernflower.decompileContext();
 
 			String decompiled = source.getSink().getDecompiledOutput().get();

@@ -11,11 +11,11 @@ import java.util.*;
 
 /**
  * Collection of object representations of mappings.
- * Useful as an intermediate between multiple types of {@link Mappings}.
+ * Useful as an intermediate between multiple types of {@link ExportableMappings}.
  *
  * @author Matt Coley
  */
-public class IntermediateMappings implements Mappings {
+public class IntermediateMappings implements ExportableMappings {
 	protected final Map<String, ClassMapping> classes = new HashMap<>();
 	protected final Map<String, List<FieldMapping>> fields = new HashMap<>();
 	protected final Map<String, List<MethodMapping>> methods = new HashMap<>();

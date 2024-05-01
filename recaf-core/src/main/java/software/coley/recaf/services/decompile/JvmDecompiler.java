@@ -3,6 +3,7 @@ package software.coley.recaf.services.decompile;
 import jakarta.annotation.Nonnull;
 import software.coley.recaf.info.JvmClassInfo;
 import software.coley.recaf.services.decompile.filter.JvmBytecodeFilter;
+import software.coley.recaf.services.decompile.filter.WorkspaceJvmBytecodeFilter;
 import software.coley.recaf.workspace.model.Workspace;
 
 /**
@@ -32,6 +33,28 @@ public interface JvmDecompiler extends Decompiler {
 	 * {@code false} if the filter was not already registered.
 	 */
 	boolean removeJvmBytecodeFilter(@Nonnull JvmBytecodeFilter filter);
+
+	/**
+	 * Adds a filter which operates on the bytecode of classes before passing it along to the decompiler.
+	 *
+	 * @param filter
+	 * 		Filter to add.
+	 *
+	 * @return {@code true} on successful addition.
+	 * {@code false} if the filter has already been added.
+	 */
+	boolean addWorkspaceBytecodeFilter(@Nonnull WorkspaceJvmBytecodeFilter filter);
+
+	/**
+	 * Removes a filter which operates on the bytecode of classes before passing it along to the decompiler.
+	 *
+	 * @param filter
+	 * 		Filter to remove.
+	 *
+	 * @return {@code true} on successful removal.
+	 * {@code false} if the filter was not already registered.
+	 */
+	boolean removeWorkspaceBytecodeFilter(@Nonnull WorkspaceJvmBytecodeFilter filter);
 
 	/**
 	 * @param workspace

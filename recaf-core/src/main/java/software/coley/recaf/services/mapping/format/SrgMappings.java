@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import software.coley.collections.tuple.Pair;
 import software.coley.recaf.analytics.logging.Logging;
 import software.coley.recaf.services.mapping.BasicMappingsRemapper;
+import software.coley.recaf.services.mapping.ExportableMappings;
 import software.coley.recaf.services.mapping.IntermediateMappings;
-import software.coley.recaf.services.mapping.Mappings;
 import software.coley.recaf.services.mapping.data.ClassMapping;
 import software.coley.recaf.services.mapping.data.FieldMapping;
 import software.coley.recaf.services.mapping.data.MethodMapping;
@@ -89,7 +89,7 @@ public class SrgMappings extends AbstractMappingFileFormat {
 	}
 
 	@Override
-	public String exportText(@Nonnull Mappings mappings) {
+	public String exportText(@Nonnull ExportableMappings mappings) {
 		StringBuilder sb = new StringBuilder();
 		Remapper remapper = new BasicMappingsRemapper(mappings);
 		IntermediateMappings intermediate = mappings.exportIntermediate();

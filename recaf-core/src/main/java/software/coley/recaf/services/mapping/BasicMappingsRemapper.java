@@ -1,14 +1,17 @@
 package software.coley.recaf.services.mapping;
 
 import jakarta.annotation.Nonnull;
+import org.objectweb.asm.Handle;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.Remapper;
+import software.coley.recaf.util.Handles;
 
 /**
  * {@link Remapper} implementation that delegates to a provided {@link Mappings} and supports local variable renaming.
  *
  * @author Matt Coley
  */
-public class BasicMappingsRemapper extends Remapper {
+public class BasicMappingsRemapper extends EnhancedRemapper {
 	protected final Mappings mappings;
 	private boolean modified;
 
@@ -137,11 +140,31 @@ public class BasicMappingsRemapper extends Remapper {
 	@Override
 	public String mapAnnotationAttributeName(String descriptor, String name) {
 		// Used by annotation visitor
-		return name;
+		String annotationName = Type.getType(descriptor).getInternalName();
+		return mapMethodName(annotationName, name, descriptor);
 	}
 
 	@Override
 	public String mapInvokeDynamicMethodName(String name, String descriptor) {
+		return name;
+	}
+
+	@Nonnull
+	@Override
+	public String mapInvokeDynamicMethodName(@Nonnull String name, @Nonnull String descriptor, @Nonnull Handle bsm,
+											 @Nonnull Object[] bsmArguments) {
+		if (bsm.equals(Handles.META_FACTORY)) {
+			// Get the interface from the descriptor return type.
+			String interfaceOwner = Type.getReturnType(descriptor).getInternalName();
+
+			// Get the method descriptor from the implementation handle (2nd arg value)
+			if (bsmArguments[1] instanceof Handle implementationHandle) {
+				String interfaceMethodDesc = implementationHandle.getDesc();
+				return mapMethodName(interfaceOwner, name, interfaceMethodDesc);
+			}
+		}
+
+		// Not a known method handle type, so we do not know how to bootstrapMethodHandle renaming it.
 		return name;
 	}
 
@@ -161,7 +184,9 @@ public class BasicMappingsRemapper extends Remapper {
 	 *
 	 * @return Mapped name of the variable, or the existing name if no mapping exists.
 	 */
-	public String mapVariableName(String className, String methodName, String methodDesc,
+	@Nonnull
+	@Override
+	public String mapVariableName(@Nonnull String className, @Nonnull String methodName, @Nonnull String methodDesc,
 								  String name, String desc, int index) {
 		String mapped = mappings.getMappedVariableName(className, methodName, methodDesc, name, desc, index);
 		if (mapped != null) {

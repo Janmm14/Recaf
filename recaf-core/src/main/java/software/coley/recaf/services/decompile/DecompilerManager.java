@@ -45,6 +45,9 @@ public class DecompilerManager implements Service {
 	private final DecompilerManagerConfig config;
 	private final ObservableObject<JvmDecompiler> targetJvmDecompiler;
 	private final ObservableObject<AndroidDecompiler> targetAndroidDecompiler;
+	private final List<OutputTextFilter> outputTextFilters = new ArrayList<>();
+	private final List<JvmBytecodeFilter> bytecodeFilters = new ArrayList<>();
+	private final List<WorkspaceJvmBytecodeFilter> workspaceFilters = new ArrayList<>();
 
 	/**
 	 * @param config
@@ -184,6 +187,7 @@ public class DecompilerManager implements Service {
 	 * 		Filter to add.
 	 */
 	public void addJvmBytecodeFilter(@Nonnull JvmBytecodeFilter filter) {
+		bytecodeFilters.add(filter);
 		for (JvmDecompiler decompiler : jvmDecompilers.values()) {
 			decompiler.addJvmBytecodeFilter(filter);
 		}
@@ -196,6 +200,7 @@ public class DecompilerManager implements Service {
 	 * 		Filter to remove.
 	 */
 	public void removeJvmBytecodeFilter(@Nonnull JvmBytecodeFilter filter) {
+		bytecodeFilters.remove(filter);
 		for (JvmDecompiler decompiler : jvmDecompilers.values()) {
 			decompiler.removeJvmBytecodeFilter(filter);
 		}
@@ -208,6 +213,7 @@ public class DecompilerManager implements Service {
 	 * 		Filter to add.
 	 */
 	public void addWorkspaceBytecodeFilter(@Nonnull WorkspaceJvmBytecodeFilter filter) {
+		workspaceFilters.add(filter);
 		for (JvmDecompiler decompiler : jvmDecompilers.values()) {
 			decompiler.addWorkspaceBytecodeFilter(filter);
 		}
@@ -220,6 +226,7 @@ public class DecompilerManager implements Service {
 	 * 		Filter to remove
 	 */
 	public void removeWorkspaceBytecodeFilter(@Nonnull WorkspaceJvmBytecodeFilter filter) {
+		workspaceFilters.remove(filter);
 		for (JvmDecompiler decompiler : jvmDecompilers.values()) {
 			decompiler.removeWorkspaceBytecodeFilter(filter);
 		}
@@ -232,6 +239,7 @@ public class DecompilerManager implements Service {
 	 * 		Filter to add.
 	 */
 	public void addOutputTextFilter(@Nonnull OutputTextFilter filter) {
+		outputTextFilters.add(filter);
 		for (JvmDecompiler decompiler : jvmDecompilers.values())
 			decompiler.addOutputTextFilter(filter);
 		for (AndroidDecompiler decompiler : androidDecompilers.values())
@@ -245,6 +253,7 @@ public class DecompilerManager implements Service {
 	 * 		Filter to remove.
 	 */
 	public void removeOutputTextFilter(@Nonnull OutputTextFilter filter) {
+		outputTextFilters.remove(filter);
 		for (JvmDecompiler decompiler : jvmDecompilers.values())
 			decompiler.removeOutputTextFilter(filter);
 		for (AndroidDecompiler decompiler : androidDecompilers.values())
@@ -273,6 +282,9 @@ public class DecompilerManager implements Service {
 	 */
 	public void register(@Nonnull JvmDecompiler decompiler) {
 		jvmDecompilers.put(decompiler.getName(), decompiler);
+		bytecodeFilters.forEach(decompiler::addJvmBytecodeFilter);
+		workspaceFilters.forEach(decompiler::addWorkspaceBytecodeFilter);
+		outputTextFilters.forEach(decompiler::addOutputTextFilter);
 	}
 
 	/**
@@ -281,6 +293,7 @@ public class DecompilerManager implements Service {
 	 */
 	public void register(@Nonnull AndroidDecompiler decompiler) {
 		androidDecompilers.put(decompiler.getName(), decompiler);
+		outputTextFilters.forEach(decompiler::addOutputTextFilter);
 	}
 
 	/**
